@@ -30,8 +30,17 @@ tagged.search('gif', function(error, response) {
           throw new Error(error);
     }
 
-  console.log(response.post_url);
+  console.log(response.length);
+
+  for (var i = 0; i < response.length; i++) {
+
+        console.log(response[i].photos[0].original_size.url);
+
+        }
+
 });
+
+response.write("<img src='http://24.media.tumblr.com/dd56c9dcf9eeebf4e96a2d15d5c38668/tumblr_n05v8fHVGT1s85u2fo1_500.gif' >");
 
 response.write("</body>");
 response.write("</html>");
