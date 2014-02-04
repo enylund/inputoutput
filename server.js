@@ -25,26 +25,27 @@ var server = http.createServer(function (request, response) {
  var user = new tumblr.User(oauth);
  var tagged = new tumblr.Tagged(oauth);
 
-tagged.search('gif', function(error, response) {
+tagged.search('gif', function(error, res) {
     if (error) {
           throw new Error(error);
     }
 
-  console.log(response.length);
+  console.log(res.length);
 
-  for (var i = 0; i < response.length; i++) {
+  for (var i = 0; i < res.length; i++) {
 
-        console.log(response[i].photos[0].original_size.url);
+
+        var theImageUrl = res[i].photos[0].original_size.url;
+        console.log(theImageUrl);
+        response.write("<img src='"+ theImageUrl +"'>");
 
         }
+  response.write("</body");
+  response.write("</html>");
+  response.end();
 
 });
 
-response.write("<img src='http://24.media.tumblr.com/dd56c9dcf9eeebf4e96a2d15d5c38668/tumblr_n05v8fHVGT1s85u2fo1_500.gif' >");
-
-response.write("</body>");
-response.write("</html>");
-response.end();
 });
 
 // Listen on port 8000, IP defaults to 127.0.0.1
