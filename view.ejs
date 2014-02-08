@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+        <link rel="stylesheet" href="css/main.css">
+    </head>
+    <body>
+
+        <!-- Add your site or application content here -->
+        <p>Hello World!</p>
+
+
+
+        <% if (locals.data) { %>
+            <% for (var i = 0; i < locals.data.length; i++) { %>
+                <% if (typeof locals.data[i].photos !== 'undefined' && locals.data[i].photos!=null) { %>
+                <img src='<%= locals.data[i].photos[0].original_size.url %>'>
+                <% } %>
+            <% } %>
+        <% } else { %>
+        <form name="data" action="view.ejs" method="get">
+          Username: <input type="text" name="data">
+          <input type="submit" value="Submit">
+        </form>
+        <% } %>
+
+
+
+
+
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
+        <script src="js/plugins.js"></script>
+        <script src="js/main.js"></script>
+
+    </body>
+</html>

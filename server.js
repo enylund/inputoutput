@@ -1,6 +1,12 @@
 // Load the http module to create an http server.
 var http = require('http');
+var fs = require('fs');
 var tumblr = require('tumblr');
+var url = require('url');
+var ejs = require('ejs');
+
+var view = fs.readFileSync(__dirname + '/view.ejs', 'utf8');
+
 
 var oauth = {
   consumer_key: 'SUNpLgKqnJjL8biuJCEA0Iktk7oudjtinZIW4n7d7ueJi9N8ZG',
@@ -10,45 +16,44 @@ var oauth = {
 };
 
 
-// Configure our HTTP server to respond with Hello World to all requests.
-var server = http.createServer(function (request, response) {
-  response.writeHead(200, {"Content-Type": "text/plain"});
-  var params = request.url;
+function searchTumblr(queryData, tagged, response) {
 
-  //Stream our response to back to the browser, starting with the headers
-  response.writeHead(200, {'Content-Type': 'text/html'});
-  //
-  // Now begin streaming the payload, which is an HTML document
-  response.write("<html>");
-  response.write("<body>");
-
- var user = new tumblr.User(oauth);
- var tagged = new tumblr.Tagged(oauth);
-
-tagged.search('gif', function(error, res) {
+tagged.search( queryData, function(error, res) {
     if (error) {
           throw new Error(error);
     }
 
-  console.log(res.length);
+    response.write(ejs.render(view, {locals: {
+    data: res,
+    }}));
+    response.end();
 
-  for (var i = 0; i < res.length; i++) {
+});
+
+}
 
 
-        var theImageUrl = res[i].photos[0].original_size.url;
-        console.log(theImageUrl);
-        response.write("<img src='"+ theImageUrl +"'>");
+// Configure our HTTP server to respond with Hello World to all requests.
+var server = http.createServer(function (request, response) {
+  var queryData = url.parse(request.url, true).query;
+  queryData = queryData.data;
+  console.log(queryData);
 
-        }
-  response.write("</body");
-  response.write("</html>");
+  response.writeHead(200, {'Content-Type': 'text/html'});
+
+ var user = new tumblr.User(oauth);
+ var tagged = new tumblr.Tagged(oauth);
+
+if (queryData) {
+
+searchTumblr(queryData, tagged, response);
+
+} else {
+  response.write(ejs.render(view));
   response.end();
+}
 
-});
 
-});
-
-// Listen on port 8000, IP defaults to 127.0.0.1
-server.listen(8000);
+}).listen(8000);
 
 console.log("Server running at http://127.0.0.1:8000/");
