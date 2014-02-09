@@ -23,10 +23,19 @@ tagged.search( queryData, function(error, res) {
           throw new Error(error);
     }
 
+    console.log(res.length);
+
+    if(typeof res !== 'undefined' && res!=null && res.length>0) {
+
     response.write(ejs.render(view, {locals: {
     data: res,
+    color: queryData,
     }}));
     response.end();
+    } else {
+      response.write(ejs.render(view));
+      response.end();
+    }
 
 });
 
@@ -44,7 +53,7 @@ var server = http.createServer(function (request, response) {
  var user = new tumblr.User(oauth);
  var tagged = new tumblr.Tagged(oauth);
 
-if (queryData) {
+if (typeof queryData !== 'undefined' && queryData!=null) {
 
 searchTumblr(queryData, tagged, response);
 
@@ -54,6 +63,6 @@ searchTumblr(queryData, tagged, response);
 }
 
 
-}).listen(8000);
+}).listen(Number(process.env.PORT || 5000));
 
 console.log("Server running at http://127.0.0.1:8000/");
