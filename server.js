@@ -4,6 +4,7 @@ var fs = require('fs');
 var tumblr = require('tumblr');
 var url = require('url');
 var ejs = require('ejs');
+var async = require('async');
 
 var view = fs.readFileSync(__dirname + '/view.ejs', 'utf8');
 
@@ -15,21 +16,23 @@ var oauth = {
   token_secret: 'ExLHAr9JtVhaBqXhrtWcMURLMz0o6L00S6gk6OYrPvfDvwF7E6'
 };
 
+var dataStore = [];
 
-function searchTumblr(queryData, tagged, response) {
 
-tagged.search( queryData, function(error, res) {
+function searchTumblr(dataStore, tagged, response) {
+
+dataStore.forEach(function(dataInd) {
+
+tagged.search( dataInd, function(error, res) {
     if (error) {
           throw new Error(error);
     }
-
-    console.log(res.length);
 
     if(typeof res !== 'undefined' && res!=null && res.length>0) {
 
     response.write(ejs.render(view, {locals: {
     data: res,
-    color: queryData,
+    dataStore: dataStore.length
     }}));
     response.end();
     } else {
@@ -38,7 +41,7 @@ tagged.search( queryData, function(error, res) {
     }
 
 });
-
+});
 }
 
 
@@ -46,7 +49,6 @@ tagged.search( queryData, function(error, res) {
 var server = http.createServer(function (request, response) {
   var queryData = url.parse(request.url, true).query;
   queryData = queryData.data;
-  console.log(queryData);
 
   response.writeHead(200, {'Content-Type': 'text/html'});
 
@@ -55,7 +57,14 @@ var server = http.createServer(function (request, response) {
 
 if (typeof queryData !== 'undefined' && queryData!=null) {
 
-searchTumblr(queryData, tagged, response);
+      dataStore.push(queryData);
+      console.log(dataStore.length);
+
+
+    async.series([
+      searchTumblr(dataStore, tagged, response)
+    ]);
+
 
 } else {
   response.write(ejs.render(view));
