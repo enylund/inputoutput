@@ -24,17 +24,17 @@
   #layer_<%= svgPass %> {
               position:absolute;
               left:<%= Math.floor(-10 + Math.random() * 90)%>%;
-              -webkit-animation:spin <%= Math.floor(0 + Math.random() * 9)%>s linear infinite;
-              -moz-animation:spin <%= Math.floor(0 + Math.random() * 9)%>s linear infinite;
-              animation:spin <%= Math.floor(0 + Math.random() * 9)%>s linear infinite;
-              top: <%= Math.floor(0 + Math.random() * 9)%>%;
+              -webkit-animation:spin_<%= svgPass %> <%= Math.floor(4 + Math.random() * 9)%>s linear infinite;
+              -moz-animation:spin_<%=svgPass%> <%= Math.floor(4 + Math.random() * 9)%>s linear infinite;
+              animation:spin_<%=svgPass%> <%= Math.floor(4 + Math.random() * 9)%>s linear infinite;
+              top: <%= Math.floor(1 + Math.random() * 80)%>%;
             }
+
+            <% if(svgPass % 2 == 0) { var spinDirection = -360 } else { var spinDirection = 360 } %>
+            @-moz-keyframes spin_<%= svgPass %> { 100% { -moz-transform: rotate(<%= spinDirection %>deg); } }
+            @-webkit-keyframes spin_<%= svgPass %> { 100% { -webkit-transform: rotate(<%= spinDirection %>deg); } }
+            @keyframes spin_<%= svgPass %> { 100% { -webkit-transform: rotate(<%= spinDirection %>deg); transform:rotate(<%= spinDirection %>deg); } }
             <% } %>
-
-
-            @-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
-            @-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
-            @keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
         </style>
 
 
@@ -43,9 +43,11 @@
     <body>
     <% for(var svgPass=0; svgPass<locals.dataStore; svgPass++) { %>
         <!-- Add your site or application content here -->
+<% var size = (Math.floor(100 + Math.random() * 600)) %>
+
         <svg version="1.1" id="layer_<%= svgPass %>" xmlns:x="&ns_extend;" xmlns:i="&ns_ai;" xmlns:graph="&ns_graphs;"
-			 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="791.179px"
-			 height="794.18px" viewBox="0 0 1791.179 1794.18" enable-background="new 0 0 1791.179 1794.18" xml:space="preserve">
+          xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="<%= size %>px"
+          height="<%= size %>px" viewBox="0 0 1791.179 1794.18" enable-background="new 0 0 1791.179 1794.18" xml:space="preserve">
 	
 		<g style="stroke:black; stroke-width:3; ">	
 			
@@ -101,14 +103,14 @@
 
         <% if (locals.data) { %>
             <% for (var i = 1; i < 13; i++) { %>
-                <% if (typeof locals.data[i].photos !== 'undefined' && locals.data[i].photos!=null) { %>
-	<image clip-path="url(#<%= svgPass %>clip<%=i%>)" height="100%" width="100%" xlink:href="<%= locals.data[i].photos[0].original_size.url %>" preserveAspectRatio="xMidYMin slice"></image>
-  <% } else if (typeof locals.data[i-1].photos !== 'undefined' && locals.data[i-1].photos!=null ){%>
-	<image clip-path="url(#<%= svgPass %>clip<%=i%>)" height="100%" width="100%" xlink:href="<%= locals.data[i-1].photos[0].original_size.url %>" preserveAspectRatio="xMidYMin slice"></image>
-  <% }  else if (typeof locals.data[i-2].photos !== 'undefined' && locals.data[i-2].photos!=null ){%>
-	<image clip-path="url(#<%= svgPass %>clip<%=i%>)" height="100%" width="100%" xlink:href="<%= locals.data[i-2].photos[0].original_size.url %>" preserveAspectRatio="xMidYMin slice"></image>
-  <% } else if (typeof locals.data[i-3].photos !== 'undefined' && locals.data[i-3].photos!=null ){%>
-	<image clip-path="url(#<%= svgPass %>clip<%=i%>)" height="100%" width="100%" xlink:href="<%= locals.data[i-3].photos[0].original_size.url %>" preserveAspectRatio="xMidYMin slice"></image>
+                <% if (typeof locals.data[svgPass][i].photos !== 'undefined' && locals.data[svgPass][i].photos!=null) { %>
+	<image clip-path="url(#<%= svgPass %>clip<%=i%>)" height="100%" width="100%" xlink:href="<%= locals.data[svgPass][i].photos[0].original_size.url %>" preserveAspectRatio="xMidYMin slice"></image>
+  <% } else if (typeof locals.data[svgPass][i-1].photos !== 'undefined' && locals.data[svgPass][i-1].photos!=null ){%>
+  <image clip-path="url(#<%= svgPass %>clip<%=i%>)" height="100%" width="100%" xlink:href="<%= locals.data[svgPass][i-1].photos[0].original_size.url %>" preserveAspectRatio="xMidYMin slice"></image>
+  <% }  else if (typeof locals.data[svgPass][i-2].photos !== 'undefined' && locals.data[svgPass][i-2].photos!=null ){%>
+	<image clip-path="url(#<%= svgPass %>clip<%=i%>)" height="100%" width="100%" xlink:href="<%= locals.data[svgPass][i-2].photos[0].original_size.url %>" preserveAspectRatio="xMidYMin slice"></image>
+  <% } else if (typeof locals.data[svgPass][i-3].photos !== 'undefined' && locals.data[svgPass][i-3].photos!=null ){%>
+	<image clip-path="url(#<%= svgPass %>clip<%=i%>)" height="100%" width="100%" xlink:href="<%= locals.data[svgPass][i-3].photos[0].original_size.url %>" preserveAspectRatio="xMidYMin slice"></image>
   <% } %>
   <% } %>
 </svg>
@@ -116,7 +118,7 @@
         <% } %>
 
  <form name="data" action="view.ejs" method="get">
-          Username: <input type="text" name="data">
+          <input type="text" name="data">
           <input type="submit" value="Submit">
         </form>
 
