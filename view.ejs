@@ -134,8 +134,17 @@
                  color: black;  
             }
 
-            :-ms-input-placeholder {  
-                 color: black;  
+            :-ms-input-placeholder {
+                 color: black;
+            }
+
+            :focus::-webkit-input-placeholder {
+                   text-indent: -999px
+            }
+
+
+            :focus::-moz-placeholder {
+                   text-indent: -999px
             }
 
 
