@@ -36,8 +36,8 @@
 
             #jukebox {
             position:fixed;
-            right:2%;
-            top:2%;
+            left:260px;
+            top:2.6%;
             font-size: 30px;
             text-transform:uppercase;
             font-weight:bold;
@@ -45,7 +45,7 @@
             }
 
             #songTitle {
-              z-index:10;
+              z-index:92;
               position:fixed;
               left:2%;
               bottom:1%;
@@ -59,7 +59,7 @@
             }
 
             #next {
-              z-index:10;
+              z-index:91;
             position: fixed;
             font-size:20px;
             bottom: 1%;
@@ -69,7 +69,7 @@
             }
 
             #previous {
-            z-index:10;
+            z-index:91;
             position: fixed;
             font-size:20px;
             bottom:1%;
@@ -91,7 +91,7 @@
 
 
             #bottomColor {
-              z-index:1;
+              z-index:90;
             position:fixed;
             bottom: 0px;
             width:100%;
@@ -101,6 +101,7 @@
             }
 
             input[type=text] {
+            z-index:1000;
             cursor:pointer;
             border: none;
             padding: 3px;
@@ -153,12 +154,13 @@
 
 <% for(var svgPass=0; svgPass<locals.dataStore; svgPass++) { %>
   #layer_<%= svgPass %> {
+              z-index: <%= svgPass %>;
               position:absolute;
-              left:<%= Math.floor(-10 + Math.random() * 70)%>%;
+              left:<%= Math.floor(Math.random() * (80 - (-10) + (-10))) + 0%>%;
               -webkit-animation:spin_<%= svgPass %> <%= Math.floor(4 + Math.random() * 9)%>s linear infinite;
               -moz-animation:spin_<%=svgPass%> <%= Math.floor(4 + Math.random() * 9)%>s linear infinite;
               animation:spin_<%=svgPass%> <%= Math.floor(4 + Math.random() * 9)%>s linear infinite;
-              top: <%= Math.floor(1 + Math.random() * 50)%>%;
+              top: <%= Math.floor(Math.random() * (50 - 0 + 1)) + 0%>%;
   }
 
 
@@ -257,7 +259,7 @@
         <div id='songTitle'></div>
         <div id='next'>&#9654;</div>
         <div id='previous'>&#9664;</div>
-        <!-- <div id='jukebox'><span id='jukeboxName'>Tumblr</span> Jukebox</div> -->
+        <div id='jukebox'>Jukebox</div>
         <div id='bottomColor'></div>
 
 
