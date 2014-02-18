@@ -36,10 +36,9 @@
 
             #jukebox {
             position:fixed;
-            left:50%;
-            top:10px;
-            margin-left: -150px;
-            font-size: 60px;
+            right:2%;
+            top:2%;
+            font-size: 30px;
             text-transform:uppercase;
             font-weight:bold;
             font-family:arial,helvetica,sans-serif;
@@ -56,6 +55,7 @@
               font-weight:bold;
               text-transform:uppercase;
               font-family:arial, helvetica, sans-serif;
+              letter-spacing:-1px;
             }
 
             #next {
@@ -100,16 +100,57 @@
             border-top:solid black 1px;
             }
 
+            input[type=text] {
+            border: none;
+            padding: 3px;
+            background: transparent;
+            color:black;
+            font-size: 30px;
+            outline: none;
+            text-align:center;
+            width:200px;
+
+            border-style: solid; 
+            border-width: 0px 0px 3px 0px; 
+            border-color: black;
+            position: fixed;
+            left: 2%;
+            top:2%;
+            text-transform:uppercase;
+            letter-spacing:-1px;
+            font-family:arial,helvetica,sans-serif;
+            font-weight: bold;
+            }
+
+            ::-webkit-input-placeholder {
+                 color: black;
+            }
+
+            :-moz-placeholder { /* Firefox 18- */
+                 color: black;  
+            }
+
+            ::-moz-placeholder {  /* Firefox 19+ */
+                 color: black;  
+            }
+
+            :-ms-input-placeholder {  
+                 color: black;  
+            }
+
+
+
 
 <% for(var svgPass=0; svgPass<locals.dataStore; svgPass++) { %>
   #layer_<%= svgPass %> {
               position:absolute;
-              left:<%= Math.floor(-10 + Math.random() * 90)%>%;
+              left:<%= Math.floor(-10 + Math.random() * 70)%>%;
               -webkit-animation:spin_<%= svgPass %> <%= Math.floor(4 + Math.random() * 9)%>s linear infinite;
               -moz-animation:spin_<%=svgPass%> <%= Math.floor(4 + Math.random() * 9)%>s linear infinite;
               animation:spin_<%=svgPass%> <%= Math.floor(4 + Math.random() * 9)%>s linear infinite;
-              top: <%= Math.floor(1 + Math.random() * 80)%>%;
-            }
+              top: <%= Math.floor(1 + Math.random() * 50)%>%;
+  }
+
 
             <% if(svgPass % 2 == 0) { var spinDirection = -360 } else { var spinDirection = 360 } %>
             @-moz-keyframes spin_<%= svgPass %> { 100% { -moz-transform: rotate(<%= spinDirection %>deg); } }
@@ -186,7 +227,7 @@
         <% if (locals.data) { %>
             <% for (var i = 1; i < 13; i++) { %>
                 <% if (typeof locals.data[svgPass][i].photos !== 'undefined' && locals.data[svgPass][i].photos!=null) { %>
-	<image clip-path="url(#<%= svgPass %>clip<%=i%>)" height="100%" width="100%" xlink:href="<%= locals.data[svgPass][i].photos[0].original_size.url %>" preserveAspectRatio="xMidYMin slice"></image>
+	<image class="desaturate" clip-path="url(#<%= svgPass %>clip<%=i%>)" height="100%" width="100%" xlink:href="<%= locals.data[svgPass][i].photos[0].original_size.url %>" preserveAspectRatio="xMidYMin slice"></image>
   <% } else if (typeof locals.data[svgPass][i-1].photos !== 'undefined' && locals.data[svgPass][i-1].photos!=null ){%>
   <image clip-path="url(#<%= svgPass %>clip<%=i%>)" height="100%" width="100%" xlink:href="<%= locals.data[svgPass][i-1].photos[0].original_size.url %>" preserveAspectRatio="xMidYMin slice"></image>
   <% }  else if (typeof locals.data[svgPass][i-2].photos !== 'undefined' && locals.data[svgPass][i-2].photos!=null ){%>
@@ -198,21 +239,21 @@
 </svg>
         <% } %>
         <% } %>
-
  <form name="data" action="view.ejs" method="get">
-          <input type="text" name="data">
+   <input type="text" placeholder="<%= queryData%>" name="data">
           <input type="submit" value="Submit">
         </form>
 
         <div id='songTitle'></div>
         <div id='next'>&#9654;</div>
         <div id='previous'>&#9664;</div>
-        <div id='jukebox'><span id='jukeboxName'>Tumblr</span> Jukebox</div>
+        <!-- <div id='jukebox'><span id='jukeboxName'>Tumblr</span> Jukebox</div> -->
         <div id='bottomColor'></div>
 
 
 <script src="http://connect.soundcloud.com/sdk.js"></script>
         <script>
+$(":submit").hide();
             SC.initialize({
                   client_id: 'a2befdf458b195d9dc90a309e9015eb4'
             });
