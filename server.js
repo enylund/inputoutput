@@ -56,7 +56,8 @@ function searchTumblr(item, callback) {
 
 			                          response.write(ejs.render(view, {locals: {
 			                                data: finalData,
-			                                dataStore: dataStore.length
+			                                dataStore: dataStore.length,
+                                      queryData: queryData
 			                           }}));
 
                                 console.log("made it here");
